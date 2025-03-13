@@ -14,7 +14,10 @@ Datasets is avaiable at: [https://drive.google.com/drive/folders/1zM7Tm5RMH_gX33
 ## Run the code: 
 ```bash
 pip install -r requirements.txt  
-python main.py --dataset {diginetica,Retailrocket,Yoochoose64}
+python main.py --dataset diginetica --intent_num 4
+python main.py --dataset Retailrocket --intent_num 3
+python main.py --dataset Yoochoose64 --intent_num 4
+,Retailrocket,Yoochoose64}
 ```
 
 ## Citation
