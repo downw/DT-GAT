@@ -17,3 +17,8 @@ pip install -r requirements.txt
 python main.py --dataset {diginetica,Retailrocket,Yoochoose64}
 ```
 
+## Citation
+
+```bash
+xxxx
+```
