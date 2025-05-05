@@ -115,7 +115,7 @@ class SessionHCov(Module):
         self.jacard_transform = nn.Linear(1, self.emb_size, bias=False)
         self.sessionT_transform = nn.Linear(1, self.emb_size, bias=False)
 
-    def HyperGAT(self, h, adj, matrix, session_stamp):
+    def HyperGAT(self, h, adj, matrix, session_stamp, is_test=False):
         N = h.shape[0] # h: [batch_size, emb_size]
         a_input_1 = h.repeat(1, self.batch_size).view(N * N, self.emb_size)  # Q, shape: [batch_size, batch_size, self.emb_size]
         a_input_2 = h.repeat(self.batch_size, 1)  # K, shape: [batch_size, batch_size, self.emb_size]
@@ -136,8 +136,10 @@ class SessionHCov(Module):
         mask = -9e15 * torch.ones_like(e_n[0])
         
         # Combine adj and e_n based on the adj overlap
-        alpha = torch.where(adj.eq(1), e_n[0], mask)
-        for i in range(2, len(e_n) + 1):
+        alpha = mask.clone()
+        for i in range(1, len(e_n) + 1):
+            if is_test and i in {1, 4, 7, 10}: # block future sessions in the test
+                continue
             alpha = torch.where(adj.eq(i), e_n[i-1], alpha)
         
         alpha = torch.softmax(alpha, dim=-1)
@@ -146,7 +148,7 @@ class SessionHCov(Module):
 
     def forward(self, item_embedding, overlap_type, matrix, session_stamp, session_len):
         item_emb_lgcn = torch.sum(item_embedding.detach(), 1) / session_len  # [batch, emb]
-        item_emb_lgcn = self.HyperGAT(item_emb_lgcn, overlap_type, matrix, session_stamp)
+        item_emb_lgcn = self.HyperGAT(item_emb_lgcn, overlap_type, matrix, session_stamp, is_test=not self.training)
         return item_emb_lgcn
 
 
