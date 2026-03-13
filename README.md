@@ -22,5 +22,13 @@ python main.py --dataset Yoochoose64 --intent_num 4
 ## Citation
 
 ```bash
-xxxx
+@article{guo2026dual,
+  title={Dual-channel time-aware graph attention network for session-based recommendation},
+  author={Guo, Linjiang and Wu, Shiqing and Lu, Dan and Gao, Longxiang and Xu, Guandong},
+  journal={Information Sciences},
+  pages={123289},
+  year={2026},
+  publisher={Elsevier}
+}
+
 ```
